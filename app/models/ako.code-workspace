@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../Users/nikst/OneDrive/Desktop/ako"
+		},
+		{
+			"path": "../../../../../Users/nikst/OneDrive/Desktop/Lab_EventHandling"
+		},
+		{
+			"path": "../../../../../Users/nikst/OneDrive/Desktop/event driven"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "event driven"
+	}
+}
