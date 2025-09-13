@@ -251,7 +251,8 @@
       <?php foreach ($records as $r): ?>
       <tr>
         <td><?= $r['id'] ?></td>
-        <td><?= $r['first_name'] . ' ' . $r['last_name'] ?></td>
+        <td><?= $r['first_name'] ?></td>
+        <td><?= $r['last_name'] ?></td>
         <td><?= $r['email'] ?></td>
         <td>
           <?php if ($show_deleted): ?>
