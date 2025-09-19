@@ -57,4 +57,4 @@ $router->match('/users/update/{id}', 'StudentsController::update', ['GET', 'POST
 $router->get('/users/delete/{id}', 'StudentsController::delete');       // Soft delete
 $router->get('/users/deleted', 'StudentsController::deleted');          // View deleted
 $router->get('/users/restore/{id}', 'StudentsController::restore');     // Restore
-$router->get('/users/hard-delete/{id}', 'StudentsController::hard_delete'); // Permanent delete
+$router->get('/users/hard_delete/{id}', 'StudentsController::hard_delete'); // Permanent deletess

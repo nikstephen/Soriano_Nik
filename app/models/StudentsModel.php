@@ -110,4 +110,4 @@ public function hard_delete($id): ?bool
     $stmt = $this->db->raw($sql, [$id]);
     return $stmt->rowCount() > 0 ? true : null;
 }
-}
+}   
