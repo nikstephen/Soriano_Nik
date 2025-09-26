@@ -44,7 +44,7 @@ defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed');
 */
 
 /* $router->get('/', 'Welcome::index'); */
-$router->get('/', 'StudentsController::get_all');
+$router->get('/', 'StudentsController::login');
 
 // Students routes
 $router->get('/users', 'StudentsController::get_all');
@@ -58,3 +58,8 @@ $router->get('/users/delete/{id}', 'StudentsController::delete');       // Soft 
 $router->get('/users/deleted', 'StudentsController::deleted');          // View deleted
 $router->get('/users/restore/{id}', 'StudentsController::restore');     // Restore
 $router->get('/users/hard_delete/{id}', 'StudentsController::hard_delete'); // Permanent deletess
+
+$router->match('/login', 'StudentsController::login', ['GET', 'POST']);
+$router->match('/register', 'StudentsController::register', ['GET', 'POST']);
+$router->get('/logout', 'StudentsController::logout');
+$router->get('/profile', 'StudentsController::profile_page');

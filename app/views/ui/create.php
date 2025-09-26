@@ -26,22 +26,20 @@
     }
 
     h1 {
-      font-size: 2.8rem;
+      font-size: 3rem;
       margin-bottom: 40px;
       color: #00fff5;
-      text-shadow: 0 0 10px #00fff5, 0 0 20px #00bcd4;
+      text-shadow: 0 0 12px #00fff5, 0 0 25px #00bcd4;
       text-align: center;
     }
 
     form {
       background: #1f2a38;
       padding: 40px;
-      border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
       max-width: 500px;
       width: 100%;
-      text-align: center;
-      margin-bottom: 30px;
     }
 
     label {
@@ -49,12 +47,14 @@
       margin-bottom: 8px;
       font-weight: 600;
       color: #00fff5;
-      text-align: left;
     }
 
-    input[type="text"], input[type="email"] {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
       width: 100%;
-      padding: 16px;
+      padding: 14px 16px;
       margin-bottom: 24px;
       border-radius: 12px;
       border: none;
@@ -65,10 +65,50 @@
       transition: 0.3s;
     }
 
-    input[type="text"]:focus, input[type="email"]:focus {
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus {
       outline: none;
       background: #1f2a38;
       box-shadow: inset 0 0 12px #00fff5;
+    }
+
+    select {
+      appearance: none; /* remove default arrow */
+      background-image: url("data:image/svg+xml,%3Csvg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 24px;
+      cursor: pointer;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+      border: none;
+      background: #283747;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    input[type="file"]::file-selector-button {
+      background: linear-gradient(145deg, #00bcd4, #00fff5);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      color: #121212;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     button[type="submit"] {
@@ -94,7 +134,7 @@
     .back-link {
       display: inline-block;
       width: 100%;
-      padding: 18px 0; /* pataas at pababa */
+      padding: 18px 0;
       border-radius: 14px;
       background: linear-gradient(145deg, #393e46, #00bcd4);
       color: #fff;
@@ -112,21 +152,30 @@
   </style>
 </head>
 <body>
-
+   <?php $this->call->view('partials/flash', ['success' => $success, 'error' => $error]); ?>
   <h1>Create Student</h1>
 
-  <form method="post" action="/users/create">
-    <label>First Name:</label>
-    <input type="text" name="first_name" required>
+  <form method="POST" enctype="multipart/form-data">
+    <label>Username:</label>
+    <input type="text" name="username" required>
 
-    <label>Last Name:</label>
-    <input type="text" name="last_name" required>
+    <label>Password:</label>
+    <input type="password" name="password" required>
 
     <label>Email:</label>
     <input type="email" name="email" required>
 
+    <label>Role:</label>
+    <select name="role">
+      <option value="student">Student</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <label>Profile Picture:</label>
+    <input type="file" name="profile_picture">
+
     <button type="submit">Save</button>
-    <a href="/users" class="back-link">⬅ Back</a>
+    <a class="back-link" href="/users/get-all">Back to List</a>
   </form>
 
 </body>
