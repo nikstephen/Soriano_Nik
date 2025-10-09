@@ -323,7 +323,7 @@
         <td><?= $r['id'] ?></td>
         <td>
           <?php if (!empty($r['profile_picture'])): ?>
-            <img src="/LavaLustko/app/public/uploads/profile_pictures/<?= htmlspecialchars($r['profile_picture']) ?>" alt="Profile">
+            <img src="/soriano_nik/Soriano_Nik/app/public/uploads/profile_pictures/<?= htmlspecialchars($r['profile_picture']) ?>" alt="Profile">
           <?php else: ?>
             N/A
           <?php endif; ?>

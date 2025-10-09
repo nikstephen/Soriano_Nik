@@ -142,7 +142,7 @@ class StudentsModel extends Model
         $newname = time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
 
         // **FIXED UPLOAD PATH**
-        $destFolder = $_SERVER['DOCUMENT_ROOT'] . '/LavaLustko/app/public/uploads/profile_pictures/';
+        $destFolder = $_SERVER['DOCUMENT_ROOT'] . '/soriano_nik/Soriano_Nik/app/public/uploads/profile_pictures/';
         if (!is_dir($destFolder)) mkdir($destFolder, 0777, true);
 
         $destPath = $destFolder . $newname;

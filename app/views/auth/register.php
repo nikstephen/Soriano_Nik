@@ -146,8 +146,11 @@ button[type="submit"]:hover {
 </style>
 </head>
 <body>
- <?php $this->call->view('partials/flash', ['success' => $success, 'error' => $error]); ?>
-<br>
+ <?php
+$success = isset($success) ? $success : null;
+$error = isset($error) ? $error : null;
+$this->call->view('partials/flash', ['success' => $success, 'error' => $error]);
+?><br>
 <h2>Register</h2>
     
 <form method="POST" action="/register" enctype="multipart/form-data">
