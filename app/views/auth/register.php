@@ -162,6 +162,9 @@ button[type="submit"]:hover {
   <label>Password:</label>
   <input type="password" name="password" >
 
+  <label>Confirm Password:</label>
+  <input type="password" name="confirm_password">
+
   <label>Role:</label>
   <select name="role">
       <option value="student">Student</option>

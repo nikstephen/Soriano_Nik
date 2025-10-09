@@ -74,64 +74,127 @@ class StudentsController extends Controller
 
     /*** CREATE USER ***/
     public function create()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $password = $_POST['password'] ?? '';
-            if (empty($password)) {
-                redirect('/users/create');
-                return;
-            }
+{
+    $this->call->library('form_validation');
 
-            $data = [
-                'email' => trim($_POST['email'] ?? ''),
-                'username' => trim($_POST['username'] ?? ''),
-                'password' => password_hash($password, PASSWORD_DEFAULT),
-                'role' => $_POST['role'] ?? 'student',
-                'profile_picture' => $this->StudentsModel->handle_profile_upload('profile_picture'),
-                'created_at' => date('Y-m-d H:i:s')
-            ];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $this->StudentsModel->insert($data);
-            $this->session->set_flashdata('success', 'User created successfully!');
-            redirect('users/get-all');
+        // Validate text inputs
+        $this->form_validation
+            ->name('email')->required('Email is required')->valid_email('Enter a valid email')
+            ->name('username')->required('Username is required')->min_length(3)
+            ->name('password')->required('Password is required')->min_length(6)
+            ->name('confirm_password')->required('Please confirm your password')
+            ->matches('password', 'Passwords do not match');
+
+        // Collect LavaLust validation errors
+        $errors = $this->form_validation->run() == FALSE ? $this->form_validation->errors() : '';
+
+        // Validate file upload manually
+        if (!isset($_FILES['profile_picture']) || $_FILES['profile_picture']['error'] === UPLOAD_ERR_NO_FILE) {
+            $errors .= '<p>Profile picture is required.</p>';
         }
 
-         $data = [
+        // Stop if there are validation errors
+        if (!empty($errors)) {
+            $data = [
+                'success' => $this->session->flashdata('success'),
+                'error'   => $errors
+            ];
+            $this->call->view('ui/create', $data);
+            return;
+        }
+
+        // Validation passed
+        $password = $_POST['password'];
+        $data = [
+            'email' => trim($_POST['email'] ?? ''),
+            'username' => trim($_POST['username'] ?? ''),
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'role' => $_POST['role'] ?? 'student',
+            'profile_picture' => $this->StudentsModel->handle_profile_upload('profile_picture'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        // Insert record into database
+        $this->StudentsModel->insert($data);
+
+        $this->session->set_flashdata('success', 'User created successfully!');
+        redirect('users/get-all');
+        return;
+    }
+
+    // GET request: show empty create form
+    $data = [
         'success' => $this->session->flashdata('success'),
         'error'   => $this->session->flashdata('error')
     ];
     $this->call->view('ui/create', $data);
-    }
+}
 
     /*** UPDATE USER ***/
   public function update($id)
 {
     $user = $this->StudentsModel->find($id);
+    $this->call->library('form_validation');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $password = $_POST['password'] ?? '';
+        $confirm  = $_POST['confirm_password'] ?? '';
+
+        // 🔹 Always validate these
+        $this->form_validation
+            ->name('email')->required('Email is required')->valid_email('Enter a valid email')
+            ->name('username')->required('Username is required')->min_length(3);
+
+        // 🔹 Only apply password + confirm validation if user entered something
+        if (!empty($password) || !empty($confirm)) {
+            $this->form_validation
+                ->name('password')->required('Password is required')->min_length(6)
+                ->name('confirm_password')->required('Please confirm your password')
+                ->matches('password', 'Passwords do not match');
+        }
+
+        // 🔹 Run validation
+        $errors = $this->form_validation->run() == FALSE ? $this->form_validation->errors() : '';
+
+        // 🔹 Prepare base data
         $data = [
             'email' => trim($_POST['email'] ?? $user['email']),
             'username' => trim($_POST['username'] ?? $user['username']),
             'role' => $_POST['role'] ?? $user['role'],
         ];
 
-        if (!empty($_POST['password'])) {
-            $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        // 🔹 Handle password change if validation passed
+        if (empty($errors) && !empty($password)) {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
+        // 🔹 Handle optional profile picture upload
         $profile_file = $this->StudentsModel->handle_profile_upload('profile_picture');
         if ($profile_file) {
             $data['profile_picture'] = $profile_file;
         }
 
-        $this->StudentsModel->update($id, $data);
+        // 🔹 Stop update if there are errors
+        if (!empty($errors)) {
+            $data = [
+                'user' => $user,
+                'error' => $errors,
+                'success' => ''
+            ];
+            $this->call->view('ui/update', $data);
+            return;
+        }
 
-        // Set flash message
+        // 🔹 Update database
+        $this->StudentsModel->update($id, $data);
         $this->session->set_flashdata('success', 'Updated successfully!');
         redirect('/users/get-all');
     }
 
-    // Provide default flash values for the view
+    // 🔹 GET request: show form
     $data = [
         'user' => $user,
         'success' => $this->session->flashdata('success') ?? '',
@@ -173,11 +236,13 @@ class StudentsController extends Controller
         $this->form_validation
             ->name('email')->required('Email is required')->valid_email('Enter a valid email')
             ->name('username')->required('Username is required')->min_length(3)
-            ->name('password')->required('Password is required')->min_length(6);
+            ->name('password')->required('Password is required')->min_length(6)
+            ->name('confirm_password')->required('Please confirm your password')
+            ->matches('password', 'Passwords do not match');
 
         // Collect LavaLust validation errors first
         $errors = $this->form_validation->run() == FALSE ? $this->form_validation->errors() : '';
-
+        
         // Validate file upload manually
         if (!isset($_FILES['profile_picture']) || $_FILES['profile_picture']['error'] === UPLOAD_ERR_NO_FILE) {
             $errors .= '<p>Profile picture is required.</p>';

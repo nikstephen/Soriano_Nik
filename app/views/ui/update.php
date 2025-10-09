@@ -176,6 +176,8 @@
 
     <label>Password: <small>(Leave blank to keep current password)</small></label>
     <input type="password" name="password" placeholder="New Password">
+    <input type="password" name="confirm_password" placeholder="Confirm New Password">
+
 
     <label>Email:</label>
     <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>

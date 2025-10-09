@@ -157,13 +157,16 @@
 
   <form method="POST" enctype="multipart/form-data">
     <label>Username:</label>
-    <input type="text" name="username" required>
+    <input type="text" name="username">
 
     <label>Password:</label>
-    <input type="password" name="password" required>
+    <input type="password" name="password">
+
+    <label>Confirm Password:</label>
+    <input type="password" name="confirm_password">
 
     <label>Email:</label>
-    <input type="email" name="email" required>
+    <input type="email" name="email">
 
     <label>Role:</label>
     <select name="role">
